@@ -1,0 +1,191 @@
+VERSION ""
+
+NS_ :
+
+BS_:
+
+BU_: Host RollerCAN
+
+BO_ 2147483816 RollerCAN: 8 Vector__XXX
+ SG_ CmdId M : 0|8@1+ (1,0) [0|22] "" Host,RollerCAN
+ SG_ ErrorCode m2 : 8|3@1+ (1,0) [0|7] "" Host
+ SG_ MotorMode m2 : 11|3@1+ (1,0) [0|7] "" Host
+ SG_ SysStatus m2 : 14|2@1+ (1,0) [0|3] "" Host
+ SG_ RPM m2 : 16|16@1- (1,0) [-32768|32767] "rpm" Host
+ SG_ Angle m2 : 32|16@1- (1,0) [-32768|32767] "deg" Host
+ SG_ Current m2 : 48|16@1- (1,0) [-32768|32767] "mA" Host
+ SG_ NewCanId m7 : 8|8@1+ (1,0) [0|255] "" RollerCAN
+ SG_ BpsIndex m11 : 8|8@1+ (1,0) [0|2] "" Host,RollerCAN
+ SG_ FuncIndex m17 : 8|16@1+ (1,0) [0|65535] "" Host,RollerCAN
+ SG_ FuncData m17 : 32|32@1- (1,0) [-2147483648|2147483647] "" Host
+ SG_ WrFuncIndex m18 : 8|16@1+ (1,0) [0|65535] "" RollerCAN
+ SG_ WrFuncData m18 : 32|32@1- (1,0) [-2147483648|2147483647] "" RollerCAN
+ SG_ BridgeRdIndex m19 : 8|16@1+ (1,0) [0|65535] "" Host,RollerCAN
+ SG_ BridgeRdAddr m19 : 24|7@1+ (1,0) [0|127] "" RollerCAN
+ SG_ BridgeRdData m19 : 32|32@1- (1,0) [-2147483648|2147483647] "" Host
+ SG_ BridgeWrIndex m20 : 8|16@1+ (1,0) [0|65535] "" RollerCAN
+ SG_ BridgeWrAddr m20 : 24|7@1+ (1,0) [0|127] "" RollerCAN
+ SG_ BridgeWrData m20 : 32|32@1- (1,0) [-2147483648|2147483647] "" RollerCAN
+ SG_ RawRdResult m21 : 8|8@1+ (1,0) [0|1] "" Host
+ SG_ RawRdLen m21 : 16|8@1+ (1,0) [0|5] "" Host
+ SG_ RawRdBytes m21 : 24|40@1+ (1,0) [0|0] "" Host
+ SG_ RawWrResult m22 : 8|8@1+ (1,0) [0|1] "" Host
+
+CM_ BU_ Host "CAN bus master / host controller";
+CM_ BU_ RollerCAN "M5Stack RollerCAN motor driver (default CAN ID 0xA8)";
+CM_ BO_ 2147483816 "RollerCAN protocol. Extended 29-bit ID = device address (default 0xA8). Byte 0 is always the command ID (multiplexor). All multi-byte fields are little-endian.";
+CM_ SG_ 2147483816 CmdId "Command identifier in byte 0. Determines the payload layout.";
+CM_ SG_ 2147483816 ErrorCode "Bits [2:0] of status byte: error code flags";
+CM_ SG_ 2147483816 MotorMode "Bits [5:3] of status byte: motor operating mode";
+CM_ SG_ 2147483816 SysStatus "Bits [7:6] of status byte: system status";
+CM_ SG_ 2147483816 RPM "Motor speed (int16)";
+CM_ SG_ 2147483816 Angle "Mechanical angle (int16)";
+CM_ SG_ 2147483816 Current "Phase current (int16)";
+CM_ SG_ 2147483816 NewCanId "New CAN address (CMD 7). Response is a CMD 0 echo.";
+CM_ SG_ 2147483816 BpsIndex "Baudrate index (CMD 11). Response echoes the actual bps_index in byte 1.";
+CM_ SG_ 2147483816 FuncIndex "Function register index for CMD 17 (Function Read). Request and response share this field.";
+CM_ SG_ 2147483816 FuncData "Function register value (CMD 17 response only, int32 LE). Request leaves bytes 4-7 reserved.";
+CM_ SG_ 2147483816 WrFuncIndex "Function register index for CMD 18 (Function Write).";
+CM_ SG_ 2147483816 WrFuncData "Function data to write (CMD 18, int32 LE). Response is CMD 2 feedback.";
+CM_ SG_ 2147483816 BridgeRdIndex "Function register index for CMD 19 (I2C Bridge Read).";
+CM_ SG_ 2147483816 BridgeRdAddr "7-bit I2C slave address (CMD 19 request byte 3). Reserved in response.";
+CM_ SG_ 2147483816 BridgeRdData "I2C data returned by CMD 19 bridge read (int32 LE, response bytes 4-7).";
+CM_ SG_ 2147483816 BridgeWrIndex "Function register index for CMD 20 (I2C Bridge Write).";
+CM_ SG_ 2147483816 BridgeWrAddr "7-bit I2C slave address for CMD 20 (byte 3).";
+CM_ SG_ 2147483816 BridgeWrData "Data to write via CMD 20 I2C bridge (int32 LE). Response is CMD 2 feedback.";
+CM_ SG_ 2147483816 RawRdResult "CMD 21 response: 1=success, 0=failure. In the request, byte 1 is the 7-bit I2C address instead.";
+CM_ SG_ 2147483816 RawRdLen "CMD 21: byte count (max 5). Request byte 2 = bytes to read. Response byte 2 = bytes returned.";
+CM_ SG_ 2147483816 RawRdBytes "CMD 21 response: raw I2C read data (up to 5 bytes in bytes 3-7).";
+CM_ SG_ 2147483816 RawWrResult "CMD 22 response: 1=success, 0=failure. Request format: byte1=addr(6:0)|stop(7), byte2=len(max 5), bytes3-7=data.";
+
+VAL_ 2147483816 CmdId
+  0 "Echo"
+  2 "Feedback"
+  3 "MotorOn"
+  4 "MotorOff"
+  7 "ChangeCANId"
+  9 "ClearError"
+  10 "SaveFlash"
+  11 "ChangeBaudrate"
+  12 "StallProtectOn"
+  13 "StallProtectOff"
+  14 "OVPOn"
+  15 "OVPOff"
+  17 "FuncRead"
+  18 "FuncWrite"
+  19 "I2CBridgeRead"
+  20 "I2CBridgeWrite"
+  21 "RawI2CRead"
+  22 "RawI2CWrite"
+;
+
+VAL_ 2147483816 BpsIndex
+  0 "1Mbps"
+  1 "500kbps"
+  2 "250kbps"
+;
+
+VAL_ 2147483816 FuncIndex
+  0x7002 "SAVE_FLASH"
+  0x7003 "REMOVE_PROTECTION"
+  0x7004 "ON_OFF"
+  0x7005 "RUN_MODE"
+  0x7006 "CURRENT_SETTING"
+  0x700A "SPEED_SETTING"
+  0x7016 "POSITION_SETTING"
+  0x7017 "POSITION_MAX_CURRENT"
+  0x7018 "SPEED_MAX_CURRENT"
+  0x7020 "SPEED_KP"
+  0x7021 "SPEED_KI"
+  0x7022 "SPEED_KD"
+  0x7023 "POSITION_KP"
+  0x7024 "POSITION_KI"
+  0x7025 "POSITION_KD"
+  0x7030 "READBACK_SPEED"
+  0x7031 "READBACK_POSITION"
+  0x7032 "READBACK_CURRENT"
+  0x7033 "DIAL_COUNTER"
+  0x7034 "VIN"
+  0x7035 "TEMP"
+  0x7040 "OV_PROTECTION_RELEASE_MODE"
+  0x7041 "MAX_STALL_PROTECTION_ATTEMPTS"
+  0x7042 "SPEED_STALL_THRESHOLD"
+  0x7043 "SPEED_STALL_TIMEOUT"
+  0x7044 "POS_STALL_THRESHOLD"
+  0x7045 "POS_STALL_TIMEOUT"
+  0x7050 "RGB_MODE"
+  0x7051 "RGB_COLOR"
+  0x7052 "RGB_BRIGHTNESS"
+;
+
+VAL_ 2147483816 WrFuncIndex
+  0x7002 "SAVE_FLASH"
+  0x7003 "REMOVE_PROTECTION"
+  0x7004 "ON_OFF"
+  0x7005 "RUN_MODE"
+  0x7006 "CURRENT_SETTING"
+  0x700A "SPEED_SETTING"
+  0x7016 "POSITION_SETTING"
+  0x7017 "POSITION_MAX_CURRENT"
+  0x7018 "SPEED_MAX_CURRENT"
+  0x7020 "SPEED_KP"
+  0x7021 "SPEED_KI"
+  0x7022 "SPEED_KD"
+  0x7023 "POSITION_KP"
+  0x7024 "POSITION_KI"
+  0x7025 "POSITION_KD"
+  0x7033 "DIAL_COUNTER"
+  0x7050 "RGB_MODE"
+  0x7051 "RGB_COLOR"
+  0x7052 "RGB_BRIGHTNESS"
+;
+
+VAL_ 2147483816 BridgeRdIndex
+  0x7002 "SAVE_FLASH"
+  0x7003 "REMOVE_PROTECTION"
+  0x7004 "ON_OFF"
+  0x7005 "RUN_MODE"
+  0x7006 "CURRENT_SETTING"
+  0x700A "SPEED_SETTING"
+  0x7016 "POSITION_SETTING"
+  0x7017 "POSITION_MAX_CURRENT"
+  0x7018 "SPEED_MAX_CURRENT"
+  0x7020 "SPEED_KP"
+  0x7021 "SPEED_KI"
+  0x7022 "SPEED_KD"
+  0x7023 "POSITION_KP"
+  0x7024 "POSITION_KI"
+  0x7025 "POSITION_KD"
+  0x7030 "READBACK_SPEED"
+  0x7031 "READBACK_POSITION"
+  0x7032 "READBACK_CURRENT"
+  0x7033 "DIAL_COUNTER"
+  0x7034 "VIN"
+  0x7035 "TEMP"
+  0x7050 "RGB_MODE"
+  0x7051 "RGB_COLOR"
+  0x7052 "RGB_BRIGHTNESS"
+;
+
+VAL_ 2147483816 BridgeWrIndex
+  0x7002 "SAVE_FLASH"
+  0x7003 "REMOVE_PROTECTION"
+  0x7004 "ON_OFF"
+  0x7005 "RUN_MODE"
+  0x7006 "CURRENT_SETTING"
+  0x700A "SPEED_SETTING"
+  0x7016 "POSITION_SETTING"
+  0x7017 "POSITION_MAX_CURRENT"
+  0x7018 "SPEED_MAX_CURRENT"
+  0x7020 "SPEED_KP"
+  0x7021 "SPEED_KI"
+  0x7022 "SPEED_KD"
+  0x7023 "POSITION_KP"
+  0x7024 "POSITION_KI"
+  0x7025 "POSITION_KD"
+  0x7033 "DIAL_COUNTER"
+  0x7050 "RGB_MODE"
+  0x7051 "RGB_COLOR"
+  0x7052 "RGB_BRIGHTNESS"
+;
+
