@@ -121,6 +121,8 @@ typedef struct _PB_SmartKnobConfig {
 
 extern PB_SmartKnobConfig config;
 extern float motor_pid_velocity_p;
+extern float motor_pid_velocity_i;
+extern float motor_pid_velocity_d;
 extern int32_t current_position;
 
 void init_smart_knob(void);

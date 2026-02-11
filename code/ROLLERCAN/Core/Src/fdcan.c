@@ -619,6 +619,21 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
         case FUNC_ENCODER_DETENT_POS_4:
             feedback_function_read(data, 17, func_index, config.detent_positions[4]);
           break;
+        case FUNC_ENCODER_DETENT_STRENGTH:
+            feedback_function_read(data, 17, func_index, (int32_t)(config.detent_strength_unit * 100000));
+          break;
+        case FUNC_ENCODER_ENDSTOP_STRENGTH:
+            feedback_function_read(data, 17, func_index, (int32_t)(config.endstop_strength_unit * 100000));
+          break;
+        case FUNC_ENCODER_PID_KP:
+            feedback_function_read(data, 17, func_index, (int32_t)(motor_pid_velocity_p * 100000));
+          break;
+        case FUNC_ENCODER_PID_KI:
+            feedback_function_read(data, 17, func_index, (int32_t)(motor_pid_velocity_i * 100000));
+          break;
+        case FUNC_ENCODER_PID_KD:
+            feedback_function_read(data, 17, func_index, (int32_t)(motor_pid_velocity_d * 100000));
+          break;
 
         default:
           break;
@@ -840,6 +855,21 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
           break;
         case FUNC_ENCODER_DETENT_POS_4:
           config.detent_positions[4] = func_data;
+          break;
+        case FUNC_ENCODER_DETENT_STRENGTH:
+          config.detent_strength_unit = (float)func_data / 100000.0f;
+          break;
+        case FUNC_ENCODER_ENDSTOP_STRENGTH:
+          config.endstop_strength_unit = (float)func_data / 100000.0f;
+          break;
+        case FUNC_ENCODER_PID_KP:
+          motor_pid_velocity_p = (float)func_data / 100000.0f;
+          break;
+        case FUNC_ENCODER_PID_KI:
+          motor_pid_velocity_i = (float)func_data / 100000.0f;
+          break;
+        case FUNC_ENCODER_PID_KD:
+          motor_pid_velocity_d = (float)func_data / 100000.0f;
           break;
 
         default:
