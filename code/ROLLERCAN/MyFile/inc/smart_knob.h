@@ -119,6 +119,7 @@ typedef struct _PB_SmartKnobConfig {
     int16_t led_hue;
 } PB_SmartKnobConfig;
 
+extern PB_SmartKnobConfig config;
 extern float motor_pid_velocity_p;
 extern int32_t current_position;
 

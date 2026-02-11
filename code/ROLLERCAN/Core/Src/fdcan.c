@@ -589,6 +589,36 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
         case FUNC_RGB_BRIGHTNESS:
             feedback_function_read(data, 17, func_index, brightness_index);
           break;
+        case FUNC_ENCODER_DETENT_WIDTH:
+            feedback_function_read(data, 17, func_index, (int32_t)(config.position_width_radians * 100000));
+          break;
+        case FUNC_ENCODER_SNAP_POINT:
+            feedback_function_read(data, 17, func_index, (int32_t)(config.snap_point * 100000));
+          break;
+        case FUNC_ENCODER_MIN_POSITION:
+            feedback_function_read(data, 17, func_index, config.min_position);
+          break;
+        case FUNC_ENCODER_MAX_POSITION:
+            feedback_function_read(data, 17, func_index, config.max_position);
+          break;
+        case FUNC_ENCODER_DETENT_COUNT:
+            feedback_function_read(data, 17, func_index, (int32_t)config.detent_positions_count);
+          break;
+        case FUNC_ENCODER_DETENT_POS_0:
+            feedback_function_read(data, 17, func_index, config.detent_positions[0]);
+          break;
+        case FUNC_ENCODER_DETENT_POS_1:
+            feedback_function_read(data, 17, func_index, config.detent_positions[1]);
+          break;
+        case FUNC_ENCODER_DETENT_POS_2:
+            feedback_function_read(data, 17, func_index, config.detent_positions[2]);
+          break;
+        case FUNC_ENCODER_DETENT_POS_3:
+            feedback_function_read(data, 17, func_index, config.detent_positions[3]);
+          break;
+        case FUNC_ENCODER_DETENT_POS_4:
+            feedback_function_read(data, 17, func_index, config.detent_positions[4]);
+          break;
 
         default:
           break;
@@ -776,6 +806,40 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
             memcpy(&brightness_index, &func_data, 1);
             ws2812_show();
           }
+          break;
+        case FUNC_ENCODER_DETENT_WIDTH:
+          config.position_width_radians = (float)func_data / 100000.0f;
+          if (config.position_width_radians < 0.00001f)
+            config.position_width_radians = 0.00001f;
+          break;
+        case FUNC_ENCODER_SNAP_POINT:
+          config.snap_point = (float)func_data / 100000.0f;
+          break;
+        case FUNC_ENCODER_MIN_POSITION:
+          config.min_position = func_data;
+          break;
+        case FUNC_ENCODER_MAX_POSITION:
+          config.max_position = func_data;
+          break;
+        case FUNC_ENCODER_DETENT_COUNT:
+          if (func_data < 0) func_data = 0;
+          if (func_data > 5) func_data = 5;
+          config.detent_positions_count = (pb_size_t)func_data;
+          break;
+        case FUNC_ENCODER_DETENT_POS_0:
+          config.detent_positions[0] = func_data;
+          break;
+        case FUNC_ENCODER_DETENT_POS_1:
+          config.detent_positions[1] = func_data;
+          break;
+        case FUNC_ENCODER_DETENT_POS_2:
+          config.detent_positions[2] = func_data;
+          break;
+        case FUNC_ENCODER_DETENT_POS_3:
+          config.detent_positions[3] = func_data;
+          break;
+        case FUNC_ENCODER_DETENT_POS_4:
+          config.detent_positions[4] = func_data;
           break;
 
         default:
